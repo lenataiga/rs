@@ -117,7 +117,7 @@ function showCard() {
   const card = deck[currentIndex];
   document.getElementById('card3d').classList.remove('flipped');
   document.getElementById('cardWord').textContent    = card.sr;
-  document.getElementById('cardPhonetic').textContent = card.phonetic || '';
+  document.getElementById('cardPhonetic').textContent = '';
   document.getElementById('cardTrans').textContent   = card.ru;
   document.getElementById('cardCounter').textContent =
     (currentIndex + 1) + ' / ' + deck.length;
@@ -229,7 +229,6 @@ function buildPhrases(filter) {
       el.innerHTML = `
         <div class="phrase-sr">${p.sr}</div>
         <div class="phrase-ru">${p.ru}</div>
-        <div class="phrase-phonetic">${p.phonetic || ''}</div>
       `;
       el.onclick = () => el.classList.toggle('expanded');
       container.appendChild(el);

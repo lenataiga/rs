@@ -1,59 +1,53 @@
-// =============================================
-// РАЗГОВОРНИК — ФРАЗЫ
-// Чтобы добавить фразу — скопируй блок { ... }
-// в нужную категорию или создай новую.
-// =============================================
-
 const PHRASES = [
   {
     category: "Знакомство",
     items: [
-      { sr: "Како се зовете?", ru: "Как вас зовут?", phonetic: "Kako se zovete?" },
-      { sr: "Зовем се...", ru: "Меня зовут...", phonetic: "Zovem se..." },
-      { sr: "Одакле сте?", ru: "Откуда вы?", phonetic: "Odakle ste?" },
-      { sr: "Из Русије сам.", ru: "Я из России.", phonetic: "Iz Rusije sam." },
-      { sr: "Колико година имате?", ru: "Сколько вам лет?", phonetic: "Koliko godina imate?" },
-      { sr: "Причате ли српски?", ru: "Вы говорите по-сербски?", phonetic: "Pričate li srpski?" },
-      { sr: "Мало разумем.", ru: "Я немного понимаю.", phonetic: "Malo razumem." },
+      { sr: "Kako se zovete?",          ru: "Как вас зовут?" },
+      { sr: "Zovem se...",              ru: "Меня зовут..." },
+      { sr: "Odakle ste?",              ru: "Откуда вы?" },
+      { sr: "Iz Rusije sam.",            ru: "Я из России." },
+      { sr: "Koliko godina imate?",     ru: "Сколько вам лет?" },
+      { sr: "Pričate li srpski?",       ru: "Вы говорите по-сербски?" },
+      { sr: "Malo razumem.",            ru: "Я немного понимаю." },
     ]
   },
   {
     category: "В кафе / ресторане",
     items: [
-      { sr: "Један сто за двоје, молим.", ru: "Столик на двоих, пожалуйста.", phonetic: "Jedan sto za dvoje, molim." },
-      { sr: "Шта препоручујете?", ru: "Что вы рекомендуете?", phonetic: "Šta preporučujete?" },
-      { sr: "Донесите рачун, молим.", ru: "Принесите счёт, пожалуйста.", phonetic: "Donesite račun, molim." },
-      { sr: "Без меса, молим.", ru: "Без мяса, пожалуйста.", phonetic: "Bez mesa, molim." },
-      { sr: "Веома укусно!", ru: "Очень вкусно!", phonetic: "Veoma ukusno!" },
+      { sr: "Jedan sto za dvoje, molim.",  ru: "Столик на двоих, пожалуйста." },
+      { sr: "Šta preporučujete?",          ru: "Что вы рекомендуете?" },
+      { sr: "Donesite račun, molim.",      ru: "Принесите счёт, пожалуйста." },
+      { sr: "Bez mesa, molim.",            ru: "Без мяса, пожалуйста." },
+      { sr: "Veoma ukusno!",              ru: "Очень вкусно!" },
     ]
   },
   {
     category: "Транспорт",
     items: [
-      { sr: "Где је аутобуска станица?", ru: "Где автобусная станция?", phonetic: "Gde je autobuska stanica?" },
-      { sr: "Када полази воз?", ru: "Когда отправляется поезд?", phonetic: "Kada polazi voz?" },
-      { sr: "Карту до Београда, молим.", ru: "Билет до Белграда, пожалуйста.", phonetic: "Kartu do Beograda, molim." },
-      { sr: "Колико траје пут?", ru: "Сколько длится дорога?", phonetic: "Koliko traje put?" },
+      { sr: "Gde je autobuska stanica?",  ru: "Где автобусная станция?" },
+      { sr: "Kada polazi voz?",           ru: "Когда отправляется поезд?" },
+      { sr: "Kartu do Beograda, molim.",  ru: "Билет до Белграда, пожалуйста." },
+      { sr: "Koliko traje put?",          ru: "Сколько длится дорога?" },
     ]
   },
   {
     category: "Помощь / проблемы",
     items: [
-      { sr: "Помозите ми, молим!", ru: "Помогите мне, пожалуйста!", phonetic: "Pomozite mi, molim!" },
-      { sr: "Позовите лекара.", ru: "Вызовите врача.", phonetic: "Pozovite lekara." },
-      { sr: "Изгубио/Изгубила сам се.", ru: "Я потерялся / потерялась.", phonetic: "Izgubio/Izgubila sam se." },
-      { sr: "Не разумем.", ru: "Я не понимаю.", phonetic: "Ne razumem." },
-      { sr: "Молим вас, говорите полако.", ru: "Говорите медленно, пожалуйста.", phonetic: "Molim vas, govorite polako." },
+      { sr: "Pomozite mi, molim!",        ru: "Помогите мне, пожалуйста!" },
+      { sr: "Pozovite lekara.",           ru: "Вызовите врача." },
+      { sr: "Izgubio/Izgubila sam se.",   ru: "Я потерялся / потерялась." },
+      { sr: "Ne razumem.",               ru: "Я не понимаю." },
+      { sr: "Molim vas, govorite polako.", ru: "Говорите медленно, пожалуйста." },
     ]
   },
   {
     category: "Покупки",
     items: [
-      { sr: "Колико ово кошта?", ru: "Сколько это стоит?", phonetic: "Koliko ovo košta?" },
-      { sr: "Да ли имате...?", ru: "У вас есть...?", phonetic: "Da li imate...?" },
-      { sr: "Превише је скупо.", ru: "Это слишком дорого.", phonetic: "Previše je skupo." },
-      { sr: "Узећу ово.", ru: "Я возьму это.", phonetic: "Uzeću ovo." },
-      { sr: "Плаћам картицом.", ru: "Плачу картой.", phonetic: "Plaćam karticom." },
+      { sr: "Koliko ovo košta?",  ru: "Сколько это стоит?" },
+      { sr: "Da li imate...?",    ru: "У вас есть...?" },
+      { sr: "Previše je skupo.",  ru: "Это слишком дорого." },
+      { sr: "Uzeću ovo.",        ru: "Я возьму это." },
+      { sr: "Plaćam karticom.",  ru: "Плачу картой." },
     ]
   },
 ];
