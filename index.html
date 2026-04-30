@@ -5,22 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="theme-color" content="#2D4A3E" />
+  <meta name="theme-color" content="#58CC02" />
   <title>Сербский язык</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
 <header>
-  <h1>Српски језик</h1>
+  <h1>Učimo srpski</h1>
   <p>Личный справочник</p>
 </header>
-
-<nav>
-  <button class="active" onclick="showTab('cards', this)">Карточки</button>
-  <button onclick="showTab('grammar', this)">Грамматика</button>
-  <button onclick="showTab('phrases', this)">Разговорник</button>
-</nav>
 
 <main>
 
@@ -33,7 +27,7 @@
         <div class="card-face card-front">
           <div class="card-word" id="cardWord">—</div>
           <div class="card-phonetic" id="cardPhonetic"></div>
-          <div class="card-hint">нажми, чтобы перевернуть</div>
+          <div class="card-hint">нажми чтобы перевернуть</div>
         </div>
         <div class="card-face card-back">
           <div class="card-translation" id="cardTrans">—</div>
@@ -65,7 +59,21 @@
 
 </main>
 
-<!-- Data files -->
+<nav>
+  <button class="active" onclick="showTab('cards', this)">
+    <span class="nav-icon">🃏</span>
+    <span class="nav-label">Карточки</span>
+  </button>
+  <button onclick="showTab('grammar', this)">
+    <span class="nav-icon">📖</span>
+    <span class="nav-label">Грамматика</span>
+  </button>
+  <button onclick="showTab('phrases', this)">
+    <span class="nav-icon">💬</span>
+    <span class="nav-label">Разговорник</span>
+  </button>
+</nav>
+
 <script src="flashcards.js"></script>
 <script src="grammar.js"></script>
 <script src="phrases.js"></script>
@@ -116,9 +124,8 @@ function loadDeck() {
 function showCard() {
   const card = deck[currentIndex];
   document.getElementById('card3d').classList.remove('flipped');
-  document.getElementById('cardWord').textContent    = card.sr;
-  document.getElementById('cardPhonetic').textContent = '';
-  document.getElementById('cardTrans').textContent   = card.ru;
+  document.getElementById('cardWord').textContent  = card.sr;
+  document.getElementById('cardTrans').textContent = card.ru;
   document.getElementById('cardCounter').textContent =
     (currentIndex + 1) + ' / ' + deck.length;
 }
@@ -136,7 +143,6 @@ function shuffleCards() {
   showCard();
 }
 
-// Свайп на мобильном
 let touchStartX = 0;
 document.getElementById('cardViewport').addEventListener('touchstart', e => {
   touchStartX = e.touches[0].clientX;
@@ -155,20 +161,21 @@ document.getElementById('cardViewport').addEventListener('touchend', e => {
 // ============================================================
 function buildGrammar() {
   const container = document.getElementById('grammarList');
-  GRAMMAR.forEach((topic, i) => {
+  GRAMMAR.forEach(topic => {
     const item = document.createElement('div');
     item.className = 'grammar-item';
 
     const toggle = document.createElement('button');
     toggle.className = 'grammar-toggle';
     toggle.innerHTML = `<span>${topic.title}</span><span class="chevron">▼</span>`;
+
+    const body = document.createElement('div');
+    body.className = 'grammar-body';
+
     toggle.onclick = () => {
       toggle.classList.toggle('open');
       body.classList.toggle('open');
     };
-
-    const body = document.createElement('div');
-    body.className = 'grammar-body';
 
     let html = `<p class="grammar-summary">${topic.summary}</p>`;
 
@@ -176,15 +183,20 @@ function buildGrammar() {
       html += `<img class="grammar-image" src="${topic.image}" alt="${topic.title}" loading="lazy" />`;
     }
 
-    if (topic.table) {
+    // поддержка массива tables и одиночного table
+    const tableList = topic.tables || (topic.table ? [{ subtitle: null, ...topic.table }] : []);
+    tableList.forEach(t => {
+      if (t.subtitle) {
+        html += `<div class="grammar-subtitle">${t.subtitle}</div>`;
+      }
       html += `<div class="grammar-table-wrap"><table class="grammar-table">`;
-      html += `<thead><tr>${topic.table.headers.map(h => `<th>${h}</th>`).join('')}</tr></thead>`;
+      html += `<thead><tr>${t.headers.map(h => `<th>${h}</th>`).join('')}</tr></thead>`;
       html += `<tbody>`;
-      topic.table.rows.forEach(row => {
+      t.rows.forEach(row => {
         html += `<tr>${row.map(cell => `<td>${cell}</td>`).join('')}</tr>`;
       });
       html += `</tbody></table></div>`;
-    }
+    });
 
     if (topic.note) {
       html += `<div class="grammar-note">💡 ${topic.note}</div>`;
@@ -210,8 +222,7 @@ function buildPhrases(filter) {
     const items = q
       ? group.items.filter(p =>
           p.sr.toLowerCase().includes(q) ||
-          p.ru.toLowerCase().includes(q) ||
-          (p.phonetic || '').toLowerCase().includes(q)
+          p.ru.toLowerCase().includes(q)
         )
       : group.items;
 
@@ -225,12 +236,11 @@ function buildPhrases(filter) {
 
     items.forEach(p => {
       const el = document.createElement('div');
-      el.className = 'phrase-item';
+      el.className = 'chat-pair';
       el.innerHTML = `
-        <div class="phrase-sr">${p.sr}</div>
-        <div class="phrase-ru">${p.ru}</div>
+        <div class="bubble bubble-sr">${p.sr}</div>
+        <div class="bubble bubble-ru">${p.ru}</div>
       `;
-      el.onclick = () => el.classList.toggle('expanded');
       container.appendChild(el);
     });
   });
