@@ -9,7 +9,20 @@
       "Bash(/opt/homebrew/bin/gh auth *)",
       "Bash(git init *)",
       "Bash(git add *)",
-      "Bash(git commit *)"
+      "Bash(git commit *)",
+      "Bash(git remote *)",
+      "Bash(git push *)",
+      "Bash(/opt/homebrew/bin/brew install *)",
+      "Bash(pdftoppm -v)",
+      "Bash(/opt/homebrew/bin/pdftotext /Users/elenataiga/Downloads/ucimo_srpski_1.pdf -)",
+      "Bash(/opt/homebrew/bin/pdftotext -f 1 -l 30 /Users/elenataiga/Downloads/ucimo_srpski_1.pdf -)",
+      "Bash(/opt/homebrew/bin/pdftotext -f 31 -l 60 /Users/elenataiga/Downloads/ucimo_srpski_1.pdf -)",
+      "Bash(/opt/homebrew/bin/pdftotext -f 61 -l 90 /Users/elenataiga/Downloads/ucimo_srpski_1.pdf -)",
+      "Bash(/opt/homebrew/bin/pdftotext -f 91 -l 130 /Users/elenataiga/Downloads/ucimo_srpski_1.pdf -)",
+      "Bash(/opt/homebrew/bin/pdftotext -f 131 -l 160 /Users/elenataiga/Downloads/ucimo_srpski_1.pdf -)",
+      "Bash(/opt/homebrew/bin/pdftotext -f 161 -l 185 /Users/elenataiga/Downloads/ucimo_srpski_1.pdf -)",
+      "Bash(/opt/homebrew/bin/pdftotext -f 186 -l 231 /Users/elenataiga/Downloads/ucimo_srpski_1.pdf -)",
+      "Bash(git rm *)"
     ]
   }
 }
