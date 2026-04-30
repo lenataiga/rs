@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="theme-color" content="#2D4A3E" />
+  <title>Сербский язык</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header>
+  <h1>Српски језик</h1>
+  <p>Личный справочник</p>
+</header>
+
+<nav>
+  <button class="active" onclick="showTab('cards', this)">Карточки</button>
+  <button onclick="showTab('grammar', this)">Грамматика</button>
+  <button onclick="showTab('phrases', this)">Разговорник</button>
+</nav>
+
+<main>
+
+  <!-- ==================== КАРТОЧКИ ==================== -->
+  <section id="tab-cards" class="active">
+    <div class="pills" id="catPills"></div>
+
+    <div class="card-viewport" id="cardViewport" onclick="flipCard()">
+      <div class="card-3d" id="card3d">
+        <div class="card-face card-front">
+          <div class="card-word" id="cardWord">—</div>
+          <div class="card-phonetic" id="cardPhonetic"></div>
+          <div class="card-hint">нажми, чтобы перевернуть</div>
+        </div>
+        <div class="card-face card-back">
+          <div class="card-translation" id="cardTrans">—</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-controls">
+      <button onclick="prevCard()">← Назад</button>
+      <span class="card-counter" id="cardCounter">1 / 1</span>
+      <button onclick="nextCard()">Вперёд →</button>
+    </div>
+
+    <button class="shuffle-btn" onclick="shuffleCards()">⇄ Перемешать</button>
+  </section>
+
+  <!-- ==================== ГРАММАТИКА ==================== -->
+  <section id="tab-grammar">
+    <div id="grammarList"></div>
+  </section>
+
+  <!-- ==================== РАЗГОВОРНИК ==================== -->
+  <section id="tab-phrases">
+    <div class="search-box">
+      <input type="search" id="phraseSearch" placeholder="Поиск..." oninput="filterPhrases()" />
+    </div>
+    <div id="phraseList"></div>
+  </section>
+
+</main>
+
+<!-- Data files -->
+<script src="flashcards.js"></script>
+<script src="grammar.js"></script>
+<script src="phrases.js"></script>
+
+<script>
+// ============================================================
+// НАВИГАЦИЯ
+// ============================================================
+function showTab(id, btn) {
+  document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  if (btn) btn.classList.add('active');
+}
+
+// ============================================================
+// КАРТОЧКИ
+// ============================================================
+let deck = [];
+let currentIndex = 0;
+let currentCategory = 'all';
+
+function buildPills() {
+  const container = document.getElementById('catPills');
+  container.innerHTML = '';
+  Object.entries(CATEGORIES).forEach(([key, label]) => {
+    const btn = document.createElement('button');
+    btn.className = 'pill' + (key === 'all' ? ' active' : '');
+    btn.textContent = label;
+    btn.onclick = () => {
+      document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      currentCategory = key;
+      loadDeck();
+    };
+    container.appendChild(btn);
+  });
+}
+
+function loadDeck() {
+  deck = currentCategory === 'all'
+    ? [...FLASHCARDS]
+    : FLASHCARDS.filter(c => c.category === currentCategory);
+  currentIndex = 0;
+  showCard();
+}
+
+function showCard() {
+  const card = deck[currentIndex];
+  document.getElementById('card3d').classList.remove('flipped');
+  document.getElementById('cardWord').textContent    = card.sr;
+  document.getElementById('cardPhonetic').textContent = card.phonetic || '';
+  document.getElementById('cardTrans').textContent   = card.ru;
+  document.getElementById('cardCounter').textContent =
+    (currentIndex + 1) + ' / ' + deck.length;
+}
+
+function flipCard()  { document.getElementById('card3d').classList.toggle('flipped'); }
+function nextCard()  { currentIndex = (currentIndex + 1) % deck.length; showCard(); }
+function prevCard()  { currentIndex = (currentIndex - 1 + deck.length) % deck.length; showCard(); }
+
+function shuffleCards() {
+  for (let i = deck.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [deck[i], deck[j]] = [deck[j], deck[i]];
+  }
+  currentIndex = 0;
+  showCard();
+}
+
+// Свайп на мобильном
+let touchStartX = 0;
+document.getElementById('cardViewport').addEventListener('touchstart', e => {
+  touchStartX = e.touches[0].clientX;
+}, { passive: true });
+document.getElementById('cardViewport').addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  if (Math.abs(dx) > 40) {
+    dx < 0 ? nextCard() : prevCard();
+  } else {
+    flipCard();
+  }
+});
+
+// ============================================================
+// ГРАММАТИКА
+// ============================================================
+function buildGrammar() {
+  const container = document.getElementById('grammarList');
+  GRAMMAR.forEach((topic, i) => {
+    const item = document.createElement('div');
+    item.className = 'grammar-item';
+
+    const toggle = document.createElement('button');
+    toggle.className = 'grammar-toggle';
+    toggle.innerHTML = `<span>${topic.title}</span><span class="chevron">▼</span>`;
+    toggle.onclick = () => {
+      toggle.classList.toggle('open');
+      body.classList.toggle('open');
+    };
+
+    const body = document.createElement('div');
+    body.className = 'grammar-body';
+
+    let html = `<p class="grammar-summary">${topic.summary}</p>`;
+
+    if (topic.image) {
+      html += `<img class="grammar-image" src="${topic.image}" alt="${topic.title}" loading="lazy" />`;
+    }
+
+    if (topic.table) {
+      html += `<div class="grammar-table-wrap"><table class="grammar-table">`;
+      html += `<thead><tr>${topic.table.headers.map(h => `<th>${h}</th>`).join('')}</tr></thead>`;
+      html += `<tbody>`;
+      topic.table.rows.forEach(row => {
+        html += `<tr>${row.map(cell => `<td>${cell}</td>`).join('')}</tr>`;
+      });
+      html += `</tbody></table></div>`;
+    }
+
+    if (topic.note) {
+      html += `<div class="grammar-note">💡 ${topic.note}</div>`;
+    }
+
+    body.innerHTML = html;
+    item.appendChild(toggle);
+    item.appendChild(body);
+    container.appendChild(item);
+  });
+}
+
+// ============================================================
+// РАЗГОВОРНИК
+// ============================================================
+function buildPhrases(filter) {
+  const container = document.getElementById('phraseList');
+  const q = (filter || '').trim().toLowerCase();
+  container.innerHTML = '';
+  let hasAny = false;
+
+  PHRASES.forEach(group => {
+    const items = q
+      ? group.items.filter(p =>
+          p.sr.toLowerCase().includes(q) ||
+          p.ru.toLowerCase().includes(q) ||
+          (p.phonetic || '').toLowerCase().includes(q)
+        )
+      : group.items;
+
+    if (!items.length) return;
+    hasAny = true;
+
+    const label = document.createElement('div');
+    label.className = 'phrase-category-label';
+    label.textContent = group.category;
+    container.appendChild(label);
+
+    items.forEach(p => {
+      const el = document.createElement('div');
+      el.className = 'phrase-item';
+      el.innerHTML = `
+        <div class="phrase-sr">${p.sr}</div>
+        <div class="phrase-ru">${p.ru}</div>
+        <div class="phrase-phonetic">${p.phonetic || ''}</div>
+      `;
+      el.onclick = () => el.classList.toggle('expanded');
+      container.appendChild(el);
+    });
+  });
+
+  if (!hasAny) {
+    container.innerHTML = '<div class="no-results">Ничего не найдено</div>';
+  }
+}
+
+function filterPhrases() {
+  buildPhrases(document.getElementById('phraseSearch').value);
+}
+
+// ============================================================
+// ИНИЦИАЛИЗАЦИЯ
+// ============================================================
+buildPills();
+loadDeck();
+buildGrammar();
+buildPhrases();
+</script>
+
+</body>
+</html>
